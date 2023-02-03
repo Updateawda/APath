@@ -19,14 +19,14 @@ public class AStartManger
     }
     private int mapw;
     private int maph;
-    //µØÍ¼Ïà¹ØËùÓĞ¸ñ×Ó¶ÔÏóÈİÆ÷
+    //åœ°å›¾ç›¸å…³æ‰€æœ‰æ ¼å­å¯¹è±¡å®¹å™¨
     public AStartNode[,] nodes;
     private List<AStartNode> openlist=new List<AStartNode>();
     private List<AStartNode> closelist=new List<AStartNode>();
     public void InitMap(int w,int h)
     {
-        maph = w;
-        mapw = h;
+        maph = h;
+        mapw = w;
         nodes = new AStartNode[w, h];
 
         for (int i = 0; i < w; i++)
@@ -41,32 +41,32 @@ public class AStartManger
     }
     public List<AStartNode> FindPath(Vector2 startpos,Vector2 endpos)
     {
-        //Ê×ÏÈÅĞ¶Ï´«ÈëµÄÁ½¸öµãÊÇ·ñºÏ·¨
-        //1.ÔÚµØÍ¼·¶Î§ÄÚ
+        //é¦–å…ˆåˆ¤æ–­ä¼ å…¥çš„ä¸¤ä¸ªç‚¹æ˜¯å¦åˆæ³•
+        //1.åœ¨åœ°å›¾èŒƒå›´å†…
         
         if (startpos.x>mapw||startpos.x<0|| startpos.y > maph|| startpos.y < 0
             || endpos.x > mapw || endpos.x < 0 || endpos.y > maph || endpos.y < 0)
         {
-            Debug.Log("²»ÔÚµØÍ¼·¶Î§ÄÚ");
+            Debug.Log("ä¸åœ¨åœ°å›¾èŒƒå›´å†…");
             return null;
         }
         
-        //µÃµ½ÆğµãºÍÖÕµã¶ÔÓ¦µÄ¸ñ×Ó
+        //å¾—åˆ°èµ·ç‚¹å’Œç»ˆç‚¹å¯¹åº”çš„æ ¼å­
         AStartNode start = nodes[(int)startpos.x, (int)startpos.y];
         AStartNode end = nodes[(int)endpos.x, (int)endpos.y];
-        //2.ÊÇ·ñÎª×èµ²µã
+        //2.æ˜¯å¦ä¸ºé˜»æŒ¡ç‚¹
         if (start.type==NodeType.stop|| end.type == NodeType.stop)
         {
-            Debug.Log("µ±Ç°Îª×èµ²µã");
+            Debug.Log("å½“å‰ä¸ºé˜»æŒ¡ç‚¹");
             return null;
         }
-        //Çå¿ÕÁĞ±í
+        //æ¸…ç©ºåˆ—è¡¨
         openlist.Clear();
         closelist.Clear();
-        //°Ñ¿ªÊ¼µã·ÅÈë¹Ø±ÕÁĞ±íÖĞ
+        //æŠŠå¼€å§‹ç‚¹æ”¾å…¥å…³é—­åˆ—è¡¨ä¸­
         closelist.Add(start);
-        //´ÓÆğµã¿ªÊ¼ÕÒÖÜÎ§µÄµã£¬·ÅÈë¿ªÆôÁĞ±íµ±ÖĞ
-        //ÅĞ¶ÏÕâĞ©µãÊÇ·ñÎª±ß½ç£¬ÊÇ·ñÎª×èµ²£¬ÊÇ·ñÔÚ¿ªÆô»òÕß¹Ø±ÕÁĞ±íÖĞ£¬Èç¹û¶¼²»ÊÇ·ÅÈë¿ªÆô
+        //ä»èµ·ç‚¹å¼€å§‹æ‰¾å‘¨å›´çš„ç‚¹ï¼Œæ”¾å…¥å¼€å¯åˆ—è¡¨å½“ä¸­
+        //åˆ¤æ–­è¿™äº›ç‚¹æ˜¯å¦ä¸ºè¾¹ç•Œï¼Œæ˜¯å¦ä¸ºé˜»æŒ¡ï¼Œæ˜¯å¦åœ¨å¼€å¯æˆ–è€…å…³é—­åˆ—è¡¨ä¸­ï¼Œå¦‚æœéƒ½ä¸æ˜¯æ”¾å…¥å¼€å¯
         while(true)
         {
             FindNodeList(start.x - 1, start.y - 1);
@@ -80,10 +80,10 @@ public class AStartManger
            
             if (openlist.Count == 0)
             {
-                Debug.Log("ÎªËÀÂ·");
+                Debug.Log("ä¸ºæ­»è·¯");
                 return null;
             }
-            //Ñ¡³ö¿ªÆôÁĞ±íÖĞÑ°Â·ÏûºÄ×îĞ¡µÄµã£¬·ÅÈë¹Ø±ÕÁĞ±í£¬ÔÙ´Ó¿ªÆôÁĞ±íÖĞÒÆ³ı
+            //é€‰å‡ºå¼€å¯åˆ—è¡¨ä¸­å¯»è·¯æ¶ˆè€—æœ€å°çš„ç‚¹ï¼Œæ”¾å…¥å…³é—­åˆ—è¡¨ï¼Œå†ä»å¼€å¯åˆ—è¡¨ä¸­ç§»é™¤
             for (int i = 0; i < openlist.Count; i++)
             {
                 openlist[i].g = Mathf.Sqrt((openlist[i].x - startpos.x) * (openlist[i].x - startpos.x) + (openlist[i].y - startpos.y) * (openlist[i].y - startpos.y));
@@ -92,14 +92,14 @@ public class AStartManger
             }
             openlist.Sort(sortopenlist);
             closelist.Add(openlist[0]);
-            //¸´ÖÆĞÂµÄÆğµã½øĞĞÏÂÒ»¸öÑ°Â·
+            //å¤åˆ¶æ–°çš„èµ·ç‚¹è¿›è¡Œä¸‹ä¸€ä¸ªå¯»è·¯
             start = openlist[0];
             openlist.RemoveAt(0);
-            //Èç¹ûÕâ¸öµãÊÇÖÕµã£¬ÄÇÃ´·µ»Ø×îÖÕ½á¹û
-            //Èç¹û²»ÊÇÖÕµãÄÇÃ´¼ÌĞøÑ°Â·
+            //å¦‚æœè¿™ä¸ªç‚¹æ˜¯ç»ˆç‚¹ï¼Œé‚£ä¹ˆè¿”å›æœ€ç»ˆç»“æœ
+            //å¦‚æœä¸æ˜¯ç»ˆç‚¹é‚£ä¹ˆç»§ç»­å¯»è·¯
             if (start.x == endpos.x && start.y == endpos.y)
             {
-                Debug.Log("ÕÒµ½¸ÃÖÕµã");
+                Debug.Log("æ‰¾åˆ°è¯¥ç»ˆç‚¹");
                 closelist.Reverse();
                 return closelist;
             }
