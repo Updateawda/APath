@@ -34,18 +34,8 @@ public class AStartManger
         {
             for (int j = 0; j < h; j++)
             {
-                AStartNode node;
-                if (i==4&&(j==1||j==2||j==3))
-                {
-                    node = new AStartNode(i, j, NodeType.stop);
-                }
-                else
-                {
-                    node = new AStartNode(i, j, NodeType.walk);
-                    
-                }
+                AStartNode node = new AStartNode(i, j, Random.Range(1, 10) < 5 ? NodeType.stop : NodeType.walk);
                 nodes[i, j] = node;
-
             }
         }
     }
